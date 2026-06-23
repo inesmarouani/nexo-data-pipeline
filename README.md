@@ -10,7 +10,7 @@ Produit dans le cadre de la certification RNCP37827 — Développeur en Intellig
 | Script | Compétence |
 |---|---|
 | `extract_api.py` | C1 — Extraction API REST (API SIRENE gouv.fr) |
-| `extract_csv.py` | C1 — Extraction fichier (CSV legacy salariés) |
+| `generate_excel_template.py` | C1 — Génération template Excel import Nexo (Clients + Salariés) |
 | `extract_scraping.py` | C1 — Extraction scraping (tarifs fournitures) |
 | `extract_bdd.py` | C1 + C2 — Extraction PostgreSQL Nexo + requêtes SQL |
 | `clean_aggregate.py` | C3 — Agrégation et nettoyage dédié |
@@ -35,7 +35,7 @@ git clone https://github.com/<votre-compte>/nexo-data-pipeline.git
 cd nexo-data-pipeline
 
 # Installer les dépendances
-uv add requests pandas beautifulsoup4 psycopg2-binary python-dotenv faker
+uv add requests pandas openpyxl beautifulsoup4 psycopg2-binary python-dotenv
 
 # Configurer les variables d'environnement
 cp .env.example .env
@@ -60,8 +60,8 @@ DATABASE_URL=postgresql://user:password@localhost:5432/nexo
 # API SIRENE — validation SIRET clients
 uv run python extract_api.py
 
-# Fichier CSV legacy — import salariés historiques
-uv run python extract_csv.py
+# Template Excel — générer le fichier à remplir par Foxabrille
+uv run python generate_excel_template.py
 
 # Scraping — tarifs fournitures nettoyage
 uv run python extract_scraping.py
@@ -112,7 +112,7 @@ nexo-data-pipeline/
 │   └── clean/            ← données nettoyées
 │       └── dataset_final.csv
 ├── extract_api.py
-├── extract_csv.py
+├── generate_excel_template.py
 ├── extract_scraping.py
 ├── extract_bdd.py
 ├── clean_aggregate.py
@@ -135,7 +135,7 @@ Chaque requête est commentée avec : objectif, colonnes sélectionnées, jointu
 ## Choix techniques
 
 - **API SIRENE** (api.insee.fr) : gratuite, sans clé, données officielles — validation des SIRET clients
-- **Faker** : génération de données legacy réalistes (Nexo n'est pas encore en production)
+- **openpyxl / pandas** : génération du template Excel import Nexo (deux onglets, lignes d'exemple)
 - **pandas** : nettoyage et normalisation des données (dédoublonnage, formats dates/téléphones)
 - **psycopg2-binary** : connexion PostgreSQL directe pour extraction et import
 - **BeautifulSoup4** : parsing HTML pour le scraping des tarifs

@@ -42,8 +42,8 @@ jobs:
       - name: Créer dossiers data
         run: mkdir -p data/raw data/clean logs
 
-      - name: Test extract_csv.py (aucune dépendance externe)
-        run: uv run python extract_csv.py
+      - name: Génération du template Excel Nexo
+        run: mkdir -p data/output && uv run python generate_excel_template.py
 
       - name: Test extract_api.py
         run: uv run python extract_api.py
