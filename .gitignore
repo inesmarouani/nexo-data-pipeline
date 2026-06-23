@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+
+data/raw/
+data/clean/
+data/input/
+logs/
+.env
+__pycache__/
+*.pyc
